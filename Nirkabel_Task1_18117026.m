@@ -1,7 +1,8 @@
 clear all; close all; clc; pkg load communications;
-% Task I Jaringan Akses Nirkabel
+% Task 1 Jaringan Akses Nirkabel
 %% Rama Rahardi / 18117026
 
+tic
 %% initialization
 sr=128000.0; % Symbol rate
 ml=1;        % ml:Number of modulation levels (BPSK:ml=1, QPSK:ml=2, 16QAM:ml=4)
@@ -30,7 +31,7 @@ for i = 1:length(EbN0)
   
   %% error calculation
   error(i) = size(find([data- y2]),2);
-endfor
+end
 %% BER Calculation AWGN
 ber_awgn_sim = error/nd;
 ber_awgn_theory = qfunc(sqrt(2*10.^(EbN0/10)));
@@ -38,8 +39,10 @@ ber_awgn_theory = qfunc(sqrt(2*10.^(EbN0/10)));
 %% plot konstelasi
 figure;
 scatter(real(y1(1:1e2:nd)), imag(y1(1:1e2:nd)));
-title('BPSK constellation with AWGN channel');
 grid on; axis([-2 2 -2 2]);
+set(gca, 'fontsize', 14);
+xlabel('Real');
+ylabel('Imaginary');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Fading Channel
@@ -59,7 +62,8 @@ for i = 1:length(EbN0)
   
   %% error calculation
   error(i) = size(find([data- y3]),2);
-endfor
+end
+
 %% BER Calculation AWGN
 ber_fading_sim = error/nd;
 ber_fading_theory = (1/2).*(1-sqrt(10.^(EbN0/10)./(10.^(EbN0/10)+1)));
@@ -67,8 +71,10 @@ ber_fading_theory = (1/2).*(1-sqrt(10.^(EbN0/10)./(10.^(EbN0/10)+1)));
 %% plot konstelasi
 figure;
 scatter(real(y2(1:1e2:nd)), imag(y2(1:1e2:nd)));
-title('BPSK constellation with AWGN fading channel');
 grid on; axis([-2 2 -2 2]);
+set(gca, 'fontsize', 14);
+xlabel('Real');
+ylabel('Imaginary');
 
 lw = 'linewidth';
 figure; 
@@ -79,10 +85,12 @@ semilogy(EbN0_fading, ber_fading_theory, '--b',"marker", "x", lw, 1.75);
 semilogy(EbN0_fading, ber_fading_sim, '-b', "marker", "*", lw, 1.75);
 hold off;
 ylim([-10^-4 10^0]);
-h = legend('BER AWGN Theory','BER AWGN Simulated', 'BER Fading Theory','BER Fading Simulated', "location", 'NorthEast');
+h = legend('AWGN Theory','AWGN Simulated', 'AWGN Fading Theory','AWGN Fading Simulated', "location", 'NorthEast');
 xlabel('Eb/N_0 (dB)');
 ylabel('Bit Error Rate (P_e)');
 legend boxoff;
 set(gca, 'fontsize', 14);
 set(h, 'fontsize', 14);
 grid on;
+
+toc
