@@ -8,14 +8,14 @@ function fading2(len, fd, Ts)
   b = 2*pi*rand(1,N); # random phase, uniform distrib. 0 to 2*pi
   alpha = 2*pi*rand(1,N); # random angle of incidence, uniform distrib. 0 to 2*pi
   
-  t = (1:len)*Ts; # samples
+  t = (collect(1:len)*Ts)'; # samples
   
   ri = zeros(1,len); rq = zeros(1,len);
   for m = 1:N
-    ri = ri + 1/sqrt(N) * cos(2*pi*fd*cos(alpha(m))*t + a(m));
-    rq = rq + 1/sqrt(N) * cos(2*pi*fd*cos(alpha(m))*t + b(m));
+    ri = ri + 1/sqrt(N) * cos.(2*pi*fd*cos.(alpha[m])*t .+ a[m]);
+    rq = rq + 1/sqrt(N) * cos.(2*pi*fd*cos.(alpha[m])*t .+ b[m]);
   end
   
-  r = ri + j*rq;
+  r = ri + im*rq;
   return r;
 end
